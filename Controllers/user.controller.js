@@ -1,5 +1,6 @@
 import { User } from "../Schema/user.schema.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"
 
 export const signUpUser = async (req, res) => {
   try {
@@ -56,7 +57,18 @@ export const loginUser = async (req, res) => {
     return  res.status(400).json({ message: "Wrong Password" });
     }
 
-    res.status(200).json({ message: "Login Successful", user: user });
+    const token =jwt.sign(
+        {id: user._id, username: user.username, email: user.email},
+        "MYSECRETKETFORYOUTUBECLONE",
+        {expiresIn: "1h"}
+    )
+
+    res.status(200).json({ message: "Login Successful", user: {
+        id: user._id,
+        username: user.username, 
+        email: user.email,
+        avatar: user.avatar
+    }, token });
   } catch (error) {
     return res.status(400).json({ error });
   }
