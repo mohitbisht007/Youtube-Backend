@@ -1,4 +1,5 @@
 import { loginUser, signUpUser } from "../Controllers/user.controller.js";
+import { autherizeUSer } from "../Middlewares/authUser.js";
 import express from "express"
 
 const userRouter = express.Router()
