@@ -21,6 +21,12 @@ const videoSchema = new mongoose.Schema({
         default: null
     },
 
+    channel: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Channel",
+        required: true
+    },
+
     views: {
         type: Number,
         default: 0,

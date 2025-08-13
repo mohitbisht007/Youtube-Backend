@@ -2,6 +2,7 @@ import express from "express"
 import mongoose from "mongoose"
 import userRouter from "./Routes/userRoutes.js"
 import videoRouter from "./Routes/videoRoutes.js"
+import channelRouter from "./Routes/channelRoute.js"
 import { autherizeUSer } from "./Middlewares/authUser.js"
 import cors from "cors"
 
@@ -30,8 +31,9 @@ app.get("/channels", autherizeUSer, (req, res) => {
     res.send("We are on Channel Route")
 })
 
-app.use("/api/auth", userRouter)
+app.use("/api", userRouter)
 app.use("/api", videoRouter)
+app.use("/api", channelRouter)
 
 app.listen(PORT, ()=> {
   console.log("App Is Running")

@@ -1,7 +1,12 @@
 import jwt from "jsonwebtoken"
 
 export const autherizeUSer = (req, res, next) => {
-    const token = req.headers.authorization.split(" ")[1]
+    const authHeader = req.headers.authorization
+    if(!authHeader){
+        res.status(400).json({message: "Token Not Provided"})
+    }
+
+    const token = authHeader.split(" ")[1]
 
     jwt.verify(token, "MYSECRETKETFORYOUTUBECLONE", (err, user) => {
         if(err){
