@@ -9,17 +9,17 @@ const channelSchema = new mongoose.Schema({
   channelHandle: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
 
   channelDescription: {
     type: String,
   },
 
-  channelOwner : {
+  channelOwner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true
+    required: true,
   },
 
   channelAvatar: {
@@ -39,6 +39,13 @@ const channelSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+
+  videos: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Video"
+    },
+  ],
 
   totalVideos: {
     type: Number,

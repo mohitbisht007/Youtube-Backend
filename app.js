@@ -14,6 +14,7 @@ app.use(express.json())
 app.use(cors({
   origin: "http://localhost:5173",
   credentials: true,
+  allowedHeaders: ["Authorization", "Content-Type"]
 }))
 
 mongoose.connect("mongodb+srv://mohitbisht5678:Mohit123Mohit123@cluster0.odbmoae.mongodb.net/")

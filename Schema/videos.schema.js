@@ -37,10 +37,12 @@ const videoSchema = new mongoose.Schema({
         default: 0
     },
 
-    comments: {
-        type: Number,
-        default: 0
-    },
+    comments: [
+        {
+            user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+            text: {type: String, required: true}
+        }
+    ]
 })
 
 const Video = mongoose.model("Video", videoSchema) 
