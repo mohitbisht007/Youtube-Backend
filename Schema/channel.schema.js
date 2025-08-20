@@ -46,11 +46,6 @@ const channelSchema = new mongoose.Schema({
       ref: "Video"
     },
   ],
-
-  totalVideos: {
-    type: Number,
-    default: 0,
-  },
 });
 
 const Channel = mongoose.model("Channel", channelSchema);

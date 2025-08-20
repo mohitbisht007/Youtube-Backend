@@ -12,13 +12,15 @@ export const createChannel = async (req, res) => {
       channelOwner: owner
     });
 
+     await newChannel.save();
+
     const user = await User.findOneAndUpdate(
       {_id: owner},
-      {$set: {hasChannel: true}},
+      {$set: {channel: newChannel._id}},
       {new: true}
     )
+
     await user.save()
-    await newChannel.save();
 
     res.status(200).json({message: "Channel Created", channel: newChannel})
   } catch (error) {
@@ -29,12 +31,9 @@ export const createChannel = async (req, res) => {
 export const getSingleChannel = async(req, res) => {
   try {
     const channelHandle = req.params.channelhandle;
-    const userId = req.user.id
-    const user = await User.findOne({userId})
+    const channelData = await Channel.findOne({channelHandle}).populate("videos") 
 
-    const channelData = await Channel.findOne({channelHandle}) 
-
-    res.status(200).json({channelData: channelData, user: user})
+    res.status(200).json({channelData: channelData})
   } catch (error) {
      res.status(400).json(error.message)
   }

@@ -43,7 +43,7 @@ const videoSchema = new mongoose.Schema({
             text: {type: String, required: true}
         }
     ]
-})
+ }, { timestamps: true })
 
 const Video = mongoose.model("Video", videoSchema) 
 export default Video

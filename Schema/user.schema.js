@@ -28,9 +28,9 @@ const userSchema = new mongoose.Schema({
         default: "https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg"
     },
 
-    hasChannel: {
-        type: Boolean,
-        default: false
+    channel : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Channel"
     }
 })
 
