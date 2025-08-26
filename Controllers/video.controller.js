@@ -4,7 +4,7 @@ import { convertToEmbedUrl, getYoutubeThumbnail } from "../Utils/helperFunction.
 
 export const addVideo = async (req, res) => {
   try {
-    const { title, description, videoURL } = req.body;
+    const { title, description, videoURL, category } = req.body;
     const ownerId = req.user.id
     const embedVideoUL = convertToEmbedUrl(videoURL);
     const thumbnail = getYoutubeThumbnail(embedVideoUL)
@@ -17,7 +17,8 @@ export const addVideo = async (req, res) => {
       description: description,
       videoURL: embedVideoUL,
       thumbnail: thumbnail,
-      channel: channel._id
+      channel: channel._id,
+      category: category
     });
 
     channel.videos.push(newVideo._id)

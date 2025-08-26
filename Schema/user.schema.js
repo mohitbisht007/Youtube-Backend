@@ -31,7 +31,12 @@ const userSchema = new mongoose.Schema({
     channel : {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Channel"
-    }
+    },
+
+    subscriptions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Channel"
+    }]
 })
 
 export const User = mongoose.model("User", userSchema)

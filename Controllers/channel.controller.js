@@ -38,3 +38,45 @@ export const getSingleChannel = async(req, res) => {
      res.status(400).json(error.message)
   }
 }
+
+export const subscribeChannel = async(req, res) => {
+  try {
+    const { channelId } = req.body;
+    const owner = req.user.id;
+
+    if (!channelId || !owner) {
+      return res.status(400).json({ message: "Missing channelId or user" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      owner,
+      { $addToSet: { subscriptions: channelId } },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Channel Subscribed", subscriptions: user.subscriptions });
+  } catch (error) {
+    res.status(500).json({ message: "Subscription failed", error: error.message });
+  }
+}
+
+// export const unSubscribeChannel = async(req, res) => {
+// try {
+//   const channelId = req.body;
+//   const owner = req.user.id
+  
+//   const user = await User.findByIdAndUpdate(
+//    owner, {
+//     $addToSet : {subscriptions: channelId}
+//    })
+
+//    res.status(400).json({message: "Channel Subscribed"})
+  
+// } catch (error) {
+//   console.log(error)
+// }
+// }
