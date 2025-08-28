@@ -36,6 +36,7 @@ export const signUpUser = async (req, res) => {
         username: newUSer.username,
         email: newUSer.email,
         password: newUSer.password,
+        subscriptions: []
       },
     });
   } catch (error) {
@@ -67,7 +68,8 @@ export const loginUser = async (req, res) => {
         id: user._id,
         username: user.username, 
         email: user.email,
-        avatar: user.avatar
+        avatar: user.avatar,
+        subscriptions: user.subscriptions || []
     }, token });
   } catch (error) {
     return res.status(400).json({ error });

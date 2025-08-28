@@ -36,7 +36,12 @@ const userSchema = new mongoose.Schema({
     subscriptions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Channel"
-    }]
+    }],
+
+    likedVideos : [
+       { type: mongoose.Schema.Types.ObjectId,
+        ref: "Video"}
+    ]
 })
 
 export const User = mongoose.model("User", userSchema)

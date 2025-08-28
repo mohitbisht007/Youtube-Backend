@@ -44,6 +44,8 @@ export const subscribeChannel = async(req, res) => {
     const { channelId } = req.body;
     const owner = req.user.id;
 
+    console.log("Subscribe request:", req.body, req.user)
+
     if (!channelId || !owner) {
       return res.status(400).json({ message: "Missing channelId or user" });
     }
@@ -53,6 +55,11 @@ export const subscribeChannel = async(req, res) => {
       { $addToSet: { subscriptions: channelId } },
       { new: true }
     );
+
+    await Channel.findByIdAndUpdate(channelId,
+      {$inc: {subscribers: 1}},
+      {new: true}
+    )
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -64,19 +71,35 @@ export const subscribeChannel = async(req, res) => {
   }
 }
 
-// export const unSubscribeChannel = async(req, res) => {
-// try {
-//   const channelId = req.body;
-//   const owner = req.user.id
-  
-//   const user = await User.findByIdAndUpdate(
-//    owner, {
-//     $addToSet : {subscriptions: channelId}
-//    })
+export const unSubscribeChannel = async(req, res) => {
+  try {
+    const { channelId } = req.body;
+    const owner = req.user.id;
 
-//    res.status(400).json({message: "Channel Subscribed"})
-  
-// } catch (error) {
-//   console.log(error)
-// }
-// }
+    console.log("Subscribe request:", req.body, req.user)
+
+    if (!channelId || !owner) {
+      return res.status(400).json({ message: "Missing channelId or user" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      owner,
+      { $pull: { subscriptions: channelId } },
+      { new: true }
+    );
+
+    await Channel.findByIdAndUpdate(channelId,
+      {$inc: {subscribers: -1}},
+      {new: true}
+    )
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Channel Unsubscribed", subscriptions: user.subscriptions });
+  } catch (error) {
+    res.status(500).json({ message: "Subscription failed", error: error.message });
+  }
+}
+
