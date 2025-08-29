@@ -6,23 +6,37 @@ export const createChannel = async (req, res) => {
     const { channelName, channelHandle } = req.body;
     const owner = req.user.id
 
+    if(!owner){
+      res.status(400).json({message: "User Not Signed In (Invalid Token)"})
+    }
+
+    if(!channelName && !channelHandle){
+      res.status(400).json({message: "Each Field is Required"})
+    }
+
+    const avatarUrl = req.file ? req.file.path : undefined
+
     const newChannel = new Channel({
       channelName: channelName,
       channelHandle: channelHandle,
-      channelOwner: owner
+      channelOwner: owner,
+      channelAvatar: avatarUrl
     });
 
      await newChannel.save();
 
+     const updateData = {channel: newChannel._id}
+     if(avatarUrl){
+      updateData.avatar = avatarUrl
+     }
+
     const user = await User.findOneAndUpdate(
       {_id: owner},
-      {$set: {channel: newChannel._id}},
+      {$set: updateData},
       {new: true}
     )
 
-    await user.save()
-
-    res.status(200).json({message: "Channel Created", channel: newChannel})
+    res.status(200).json({message: "Channel Created, Redirecting to Your Channel Page", channel: newChannel})
   } catch (error) {
      res.status(400).json(error.message)
   }

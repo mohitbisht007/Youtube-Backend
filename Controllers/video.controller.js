@@ -9,12 +9,21 @@ import { User } from "../Schema/user.schema.js";
 export const addVideo = async (req, res) => {
   try {
     const { title, description, videoURL, category } = req.body;
+
+    if(!title && !videoURL && !category){
+      res.status(400).json({message: "Title, VideoURL and Category Is Required"})
+    }
+
     const ownerId = req.user.id;
+
+    if(!ownerId){
+      res.status(400).json({message: "Token Invalid Please Login Again"})
+    }
+
     const embedVideoUL = convertToEmbedUrl(videoURL);
     const thumbnail = getYoutubeThumbnail(embedVideoUL);
 
     const channel = await Channel.findOne({ channelOwner: ownerId });
-    console.log(channel);
 
     const newVideo = new Video({
       title: title,
@@ -40,7 +49,7 @@ export const getAllVideos = async (req, res) => {
     const allVideos = await Video.find({}).populate("channel");
     res.status(200).json({ message: "All Videos", allVideos });
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({message: "Failed To Fetch Videos"});
   }
 };
 
