@@ -14,7 +14,7 @@ const PORT = 5050
 app.use(express.json())
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: ["http://localhost:5173", "https://zentroo.netlify.app/"],
   credentials: true,
   allowedHeaders: ["Authorization", "Content-Type"]
 }))
