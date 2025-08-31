@@ -12,7 +12,6 @@ const app = express()
 const PORT = 5050
 
 app.use(express.json())
-app.options("*", cors());
 
 app.use(cors({
   origin: ["http://localhost:5173", "https://zentroo.netlify.app"],
