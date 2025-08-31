@@ -117,3 +117,29 @@ export const unSubscribeChannel = async(req, res) => {
   }
 }
 
+export const editChannel = async (req, res) => {
+  try {
+    const { channelName, channelDescription } = req.body;
+    const channelHandle = req.params.channelhandle;
+    let updateData = { channelName, channelDescription };
+
+    if (req.file) {
+      updateData.channelAvatar = req.file.path;
+    }
+
+    const updatedChannel = await Channel.findOneAndUpdate(
+      { channelHandle },
+      updateData,
+      { new: true }
+    );
+
+    if (!updatedChannel) {
+      return res.status(404).json({ message: "Channel not found" });
+    }
+
+    res.status(200).json({ message: "Channel updated", channel: updatedChannel });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update channel" });
+  }
+};
+

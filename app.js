@@ -5,7 +5,9 @@ import videoRouter from "./Routes/videoRoutes.js"
 import channelRouter from "./Routes/channelRoute.js"
 import { autherizeUSer } from "./Middlewares/authUser.js"
 import cors from "cors"
+import dotenv from "dotenv"
 
+dotenv.config()
 const app = express()
 const PORT = 5050
 
@@ -17,7 +19,7 @@ app.use(cors({
   allowedHeaders: ["Authorization", "Content-Type"]
 }))
 
-mongoose.connect("mongodb+srv://mohitbisht5678:Mohit123Mohit123@cluster0.odbmoae.mongodb.net/")
+mongoose.connect(process.env.MONGO_URI)
 .then(() => {
     console.log("DB Connected")
 })

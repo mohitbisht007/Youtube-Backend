@@ -1,6 +1,9 @@
 import { User } from "../Schema/user.schema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 export const signUpUser = async (req, res) => {
   try {
@@ -61,7 +64,7 @@ export const loginUser = async (req, res) => {
 
     const token =jwt.sign(
         {id: user._id, username: user.username, email: user.email},
-        "MYSECRETKETFORYOUTUBECLONE",
+        process.env.JWT_SECRET,
         {expiresIn: "1h"}
     )
 

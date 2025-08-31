@@ -10,14 +10,16 @@ export const addVideo = async (req, res) => {
   try {
     const { title, description, videoURL, category } = req.body;
 
-    if(!title && !videoURL && !category){
-      res.status(400).json({message: "Title, VideoURL and Category Is Required"})
+    if (!title && !videoURL && !category) {
+      res
+        .status(400)
+        .json({ message: "Title, VideoURL and Category Is Required" });
     }
 
     const ownerId = req.user.id;
 
-    if(!ownerId){
-      res.status(400).json({message: "Token Invalid Please Login Again"})
+    if (!ownerId) {
+      res.status(400).json({ message: "Token Invalid Please Login Again" });
     }
 
     const embedVideoUL = convertToEmbedUrl(videoURL);
@@ -46,10 +48,12 @@ export const addVideo = async (req, res) => {
 
 export const getAllVideos = async (req, res) => {
   try {
-    const allVideos = await Video.find({}).populate("channel");
+    const allVideos = await Video.find({})
+      .populate("channel")
+      .populate("comments.user");
     res.status(200).json({ message: "All Videos", allVideos });
   } catch (error) {
-    res.status(400).json({message: "Failed To Fetch Videos"});
+    res.status(400).json({ message: "Failed To Fetch Videos" });
   }
 };
 
@@ -99,20 +103,25 @@ export const likeRemoved = async (req, res) => {
   }
 };
 
-export const comment =  async (req, res) => {
+export const comment = async (req, res) => {
   try {
-    const {comment} = req.body;
+    const { comment } = req.body;
     const { videoId } = req.params;
-    const userId = req.user.id
+    const userId = req.user.id;
 
-    await Video.findByIdAndUpdate(
+    const video = await Video.findByIdAndUpdate(
       videoId,
-      { $push: { comments : {user: userId, text: comment} } },
+      { $push: { comments: { user: userId, text: comment } } },
       { new: true }
-    );
+    ).populate("comments.user", "username avatar"); //
 
-    res.status(200).json({ messgae: "Comment Succesfull", comment });
+    const newComment = video.comments[video.comments.length - 1];
+
+    res.status(200).json({
+      message: "Comment Successful",
+      comment: newComment, // return the object with user + text
+    });
   } catch (error) {
-     res.status(400).json(error.message);
+    res.status(400).json(error.message);
   }
-}
+};
