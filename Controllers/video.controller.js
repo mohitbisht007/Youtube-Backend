@@ -125,3 +125,40 @@ export const comment = async (req, res) => {
     res.status(400).json(error.message);
   }
 };
+
+// Get single video
+export const getSingleVideo = async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.videoId);
+    if (!video) return res.status(404).json({ message: "Video not found" });
+    res.status(200).json({ video });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch video" });
+  }
+};
+
+// Edit video
+export const editVideo = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const video = await Video.findByIdAndUpdate(
+      req.params.videoId,
+      { title, description },
+      { new: true }
+    );
+    if (!video) return res.status(404).json({ message: "Video not found" });
+    res.status(200).json({ message: "Video updated", video });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update video" });
+  }
+};
+
+// Delete video
+export const deleteVideo = async (req, res) => {
+  try {
+    await Video.findByIdAndDelete(req.params.videoId);
+    res.status(200).json({ message: "Video deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete video" });
+  }
+};

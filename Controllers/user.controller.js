@@ -90,3 +90,33 @@ export const findUser = async(req,res)=> {
     res.status(400).json({ message: error.message })
   }
 }
+
+export const checkUsername = async (req, res) => {
+  const { username } = req.body;
+  const exists = await User.findOne({ username });
+  res.json({ available: !exists });
+};
+
+// user.controller.js
+export const editUser = async (req, res) => {
+  const userId = req.user.id;
+  const { username, currentPassword, newPassword } = req.body;
+  const user = await User.findById(userId);
+
+  // Username update
+  if (username && username !== user.username) {
+    const exists = await User.findOne({ username });
+    if (exists) return res.status(400).json({ message: "Username not available" });
+    user.username = username;
+  }
+
+  // Password update
+  if (newPassword && currentPassword) {
+    const match = await bcrypt.compare(currentPassword, user.password);
+    if (!match) return res.status(400).json({ message: "Current password incorrect" });
+    user.password = await bcrypt.hash(newPassword, 10);
+  }
+
+  await user.save();
+  res.json({ message: "Profile updated", user });
+};
