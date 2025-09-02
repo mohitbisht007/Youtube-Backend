@@ -3,7 +3,6 @@ import mongoose from "mongoose"
 import userRouter from "./Routes/userRoutes.js"
 import videoRouter from "./Routes/videoRoutes.js"
 import channelRouter from "./Routes/channelRoute.js"
-import { autherizeUSer } from "./Middlewares/authUser.js"
 import cors from "cors"
 import dotenv from "dotenv"
 
@@ -28,10 +27,6 @@ mongoose.connect(process.env.MONGO_URI)
 })
 app.get("/", (req, res) => {
     res.send("We are on Home Route")
-})
-
-app.get("/channels", autherizeUSer, (req, res) => {
-    res.send("We are on Channel Route")
 })
 
 app.use("/api", userRouter)

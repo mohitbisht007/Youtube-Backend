@@ -5,12 +5,14 @@ import dotenv from "dotenv"
 
 dotenv.config()
 
+//cloudinary configaration
 cloudinary.config({
   cloud_name: "dnjblwegj",
   api_key: "298353169876335",
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
+//cloudnary storage
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
@@ -19,6 +21,8 @@ const storage = new CloudinaryStorage({
   },
 });
 
+
+//uploads
 const upload = multer({ storage });
 
 export default upload;

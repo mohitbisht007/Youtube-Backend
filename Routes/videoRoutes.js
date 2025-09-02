@@ -1,5 +1,5 @@
 import express from "express"
-import { addVideo, getAllVideos, likeVideo, likeRemoved, comment, getSingleVideo, editVideo, deleteVideo } from "../Controllers/video.controller.js"
+import { addVideo, getAllVideos, likeVideo, likeRemoved, comment, getSingleVideo, editVideo, deleteVideo} from "../Controllers/video.controller.js"
 import { autherizeUSer } from "../Middlewares/authUser.js"
 const videoRouter = express.Router()
 

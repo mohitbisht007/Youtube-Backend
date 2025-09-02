@@ -1,3 +1,4 @@
+//function to convert youtube URL to embedURL
 export function convertToEmbedUrl(url) {
   try {
     const urlObj = new URL(url);
@@ -11,6 +12,7 @@ export function convertToEmbedUrl(url) {
   }
 }
 
+//function to get thumbnail from embedURL
 export function getYoutubeThumbnail(embedUrl) {
   // Extract videoId from embed URL
   const match = embedUrl.match(/embed\/([^?&]+)/);

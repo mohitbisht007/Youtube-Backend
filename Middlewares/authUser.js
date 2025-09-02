@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 
 dotenv.config()
+
+//autherizeuser middleware function with JWT
 export const autherizeUSer = (req, res, next) => {
     const authHeader = req.headers.authorization
     if(!authHeader){
