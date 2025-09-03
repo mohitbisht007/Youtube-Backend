@@ -3,10 +3,10 @@ export function convertToEmbedUrl(url) {
   try {
     const urlObj = new URL(url);
 
-    // Case 1: Standard YouTube link ?v=VIDEOID
+    // Case 1: Standard YouTube link
     let videoId = urlObj.searchParams.get("v");
 
-    // Case 2: Shortened youtu.be link
+    // Case 2: Shortened youtube link
     if (!videoId && urlObj.hostname.includes("youtu.be")) {
       videoId = urlObj.pathname.slice(1); // remove leading '/'
       // also strip any extra params like ?si=

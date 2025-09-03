@@ -13,7 +13,7 @@ const PORT = 5050
 app.use(express.json())
 
 app.use(cors({
-  origin: ["http://localhost:5173", "https://zentroo.netlify.app"],
+  origin: ["http://localhost:5173", "https://zentroo.netlify.app"], //for my local as well as netlify
   credentials: true,
   allowedHeaders: ["Authorization", "Content-Type"]
 }))
@@ -24,10 +24,11 @@ mongoose.connect(process.env.MONGO_URI)
 })
 .catch((e) => {
   console.log(e)
-})
+}) // connected to MongoDB server
+
 app.get("/", (req, res) => {
     res.send("We are on Home Route")
-})
+}) // home route
 
 app.use("/api", userRouter)
 app.use("/api", videoRouter)
