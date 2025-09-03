@@ -2,7 +2,18 @@
 export function convertToEmbedUrl(url) {
   try {
     const urlObj = new URL(url);
-    const videoId = urlObj.searchParams.get("v");
+
+    // Case 1: Standard YouTube link ?v=VIDEOID
+    let videoId = urlObj.searchParams.get("v");
+
+    // Case 2: Shortened youtu.be link
+    if (!videoId && urlObj.hostname.includes("youtu.be")) {
+      videoId = urlObj.pathname.slice(1); // remove leading '/'
+      // also strip any extra params like ?si=
+      if (videoId.includes("?")) {
+        videoId = videoId.split("?")[0];
+      }
+    }
 
     if (!videoId) return null; // Invalid URL or no video ID found
 
